@@ -20,7 +20,7 @@ Flutter App（長者語音 + 照護者管理）
         ▼
 API Gateway + Cognito JWT 認證
         │
-        ├── POST /chat ──→ AgentCore Runtime（LangGraph 狀態機 + 13 個工具）
+        ├── POST /chat ──→ AgentCore Runtime（LangGraph 狀態機 + 17 個工具）
         │                       ├── Tools Lambda（行程/事件/安全通知）
         │                       └── Bedrock Knowledge Base（衛教知識檢索）
         │
@@ -36,7 +36,8 @@ API Gateway + Cognito JWT 認證
 - **後端**：Python Lambda + LangGraph + Bedrock Claude
 - **基礎設施**：Terraform IaC（API Gateway / DynamoDB / Cognito / S3 / SQS / EventBridge / SNS）
 - **對話 AI**：AWS Bedrock AgentCore Runtime + LangChain 工具鏈
-- **語音**：裝置端 ASR + 後端 TTS（Polly 中文 / OmniVoice 客語）
+- **語音辨識**：華語走裝置端辨識，客語錄音上傳後端 ASR（Formo 六腔 SageMaker，CE 為共同備援；後端另有 Amazon Transcribe 華語路徑）
+- **語音合成**：全在後端，華語 BreezyVoice／Polly Zhiyu，客語 OmniVoice／VoxHakka；各端點有獨立的 enable 與 production 核准開關
 
 ## 目錄結構
 
@@ -55,6 +56,7 @@ API Gateway + Cognito JWT 認證
 
 各目錄皆有獨立 README：
 [app/](app/README.md) ·
+[backend/](backend/README.md) ·
 [backend/src/](backend/src/README.md) ·
 [data/](data/README.md) ·
 [docs/](docs/README.md) ·
@@ -113,7 +115,7 @@ terraform apply
 |------|------|
 | [docs/framework.md](docs/framework.md) | 系統框架：架構圖、模組設計、DynamoDB 表結構、Session 狀態機 |
 | [docs/api.md](docs/api.md) | API 規格書：所有 REST 端點（App 與後端唯一契約） |
-| [docs/llm_tools.md](docs/llm_tools.md) | 對話大腦 13 個工具的觸發條件與 I/O |
+| [docs/llm_tools.md](docs/llm_tools.md) | 對話大腦各工具的觸發條件與 I/O |
 
 ### 語音子系統
 
@@ -134,15 +136,13 @@ terraform apply
 | [docs/features/asr-agentcore-frontend-integration-plan.md](docs/features/asr-agentcore-frontend-integration-plan.md) | ASR／Agent／Frontend 整併計畫 |
 | [docs/features/request_elder-lang-dialect-via-tool.md](docs/features/request_elder-lang-dialect-via-tool.md) | App → 後端需求：長者語言與腔調設定 |
 
-### 交付文件
+### 使用者旅程
 
 | 文件 | 說明 |
 |------|------|
-| [docs/user-journey.md](docs/user-journey.md) | 使用者旅程 |
-| [docs/deliverables/user-journey.md](docs/deliverables/user-journey.md) | 交付版使用者旅程 |
-| [docs/deliverables/frontend-chat-realtime-dataflow.md](docs/deliverables/frontend-chat-realtime-dataflow.md) | 前端 realtime 對話資料流 |
-| [docs/deliverables/frontend-session-dataflow.md](docs/deliverables/frontend-session-dataflow.md) | 前端 session 生命週期資料流 |
-| [docs/deliverables/frontend-caregiver-dataflow.md](docs/deliverables/frontend-caregiver-dataflow.md) | 前端照護者頁面資料流 |
+| [docs/user-journey.md](docs/user-journey.md) | 長者與照護者從註冊到日常使用的端到端情境 |
+
+交付版文件（交付版使用者旅程、前端各資料流）放在 `docs/deliverables/`，依 [.gitignore](.gitignore) 不進版控，只存在於本機。
 
 ### 開發指南
 
@@ -160,7 +160,7 @@ terraform apply
 |------|-----------------|
 | `cognito.tf` | Cognito User Pool（認證與 JWT） |
 | `api_gateway.tf` | API Gateway REST API（路由與 JWT 驗證） |
-| `lambda.tf` | Lambda Functions（14 支） |
+| `lambda.tf` | Lambda Functions（15 支） |
 | `lambda_config_parameters.tf` | SSM Parameters（ASR／TTS 設定） |
 | `dynamodb.tf` | DynamoDB Tables（7 張） |
 | `sqs.tf` | SQS Queue + DLQ（batch 萃取佇列） |
@@ -173,6 +173,7 @@ terraform apply
 | `asr_lambda_config.tf` | ASR 設定來源 |
 | `tts_models.tf` | TTS SageMaker Endpoint |
 | `tts_lambda_config.tf` | TTS 設定來源 |
+| `tts_worker.tf` | 非同步 TTS 合成佇列、DLQ 與 worker Lambda |
 | `cloudwatch.tf` | CloudWatch Alarms + SNS |
 | `providers.tf` / `variables.tf` / `outputs.tf` / `versions.tf` | Provider、變數、輸出、版本鎖定 |
 

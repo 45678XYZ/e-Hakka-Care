@@ -10,7 +10,7 @@
 |------|------|
 | `framework.md` | **系統整體框架**：定義三大模組（語音互動陪伴 / 生活記錄萃取 / 照護者介面）、Mermaid 架構圖、DynamoDB 5 張表設計（elders / conversations / events / daily_summaries / routines）、Session 狀態機（active → closing → closed）、Hybrid realtime/batch 處理策略、AgentCore 長期記憶與寫入規則 |
 | `api.md` | **API 規格書**：App 與後端唯一契約。涵蓋所有 REST 端點定義（`POST /chat`、`GET /events`、`GET /summaries`、`CRUD /routines`、`CRUD /elders`、`GET /stats`、session close 等）、認證機制（Cognito JWT）、Request/Response 格式、分頁慣例、錯誤代碼（400/401/403/404/409/429/500）與 enum 定義 |
-| `llm_tools.md` | **對話大腦工具規格**：定義 AgentCore Runtime 自動調用的 13 個工具，分四大類——行程管理類（get_today_routines / remind_pending_routines / complete_routine / create_routine / update_routine / deactivate_routine）、事件與摘要類（get_elder_profile / update_elder_profile / get_recent_events）、安全與警報類（notify_caregiver）、衛教知識類（search_health_knowledge）。含觸發意圖、安全冷卻機制與 elder_id 注入說明 |
+| `llm_tools.md` | **對話大腦工具規格**：定義 AgentCore Runtime 自動調用的工具，分五大類——行程管理類（get_today_routines / remind_pending_routines / complete_routine / create_routine / update_routine / delete_routine）、事件與摘要類（get_elder_profile / update_elder_profile / get_recent_events / get_daily_summaries / get_recent_conversations）、安全與警報類（notify_caregiver）、衛教知識類（search_health_knowledge）、環境資訊類（get_weather_forecast / get_events_by_time）。含觸發意圖、安全冷卻機制與 elder_id 注入說明 |
 | `framework-overview.md`、`api-overview.md` | 上面兩份權威文件的易讀導覽版，適合初次了解系統的人；技術細節仍以原始規格為準 |
 
 ### 目錄配置
@@ -23,7 +23,7 @@
 | `features/tts/` | TTS 子系統同上 |
 | `features/adr/` | remote-only、Transcribe 主備援路由、CE／Formo 模型核准等決策紀錄 |
 | `features/model_selection_asr_tts.md` | ASR／TTS 模型選型比較 |
-| `deliverables/` | 交付版使用者旅程與前端資料流說明 |
+| `deliverables/` | 交付版使用者旅程與前端資料流說明；依 `.gitignore` 不進版控，只存在於本機 |
 
 ### 跨團隊需求
 
