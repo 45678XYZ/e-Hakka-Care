@@ -96,10 +96,13 @@ pip install -r agentcore_requirements.txt
 
 ```bash
 cd terraform
+cp terraform.tfvars.example terraform.tfvars   # 填入 API 金鑰等變數
 terraform init
 terraform plan
 terraform apply
 ```
+
+> `terraform.tfvars` 不進版控。裡面每個變數都有空字串預設值，漏填不會讓 apply 失敗，而是把線上既有的值安靜覆蓋成空的，apply 前請確認 plan 沒有這種改動。
 
 ### 4. 環境變數
 
