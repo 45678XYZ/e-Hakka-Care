@@ -15,7 +15,7 @@ void main() {
   });
 
   testWidgets('未登入時顯示登入頁', (WidgetTester tester) async {
-    await tester.pumpWidget(AiElderCareApp());
+    await tester.pumpWidget(EHakkaCareApp());
     await tester.pumpAndSettle();
 
     // 登入頁的標題與主要按鈕（標題與按鈕同字，所以是兩個）

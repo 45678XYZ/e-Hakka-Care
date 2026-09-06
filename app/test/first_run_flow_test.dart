@@ -25,7 +25,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 /// 還沒有帳號，資料只能先按 email 暫存，第一次登入才兌現——這段時序是 AppSession
 /// 的 `setup_pending_` 與 router 對 /setup 的例外放行在處理的事。
 ///
-/// 為什麼要從 App 根部（[AiElderCareApp]）跑而不是各畫面單獨測：落點是 router 的
+/// 為什麼要從 App 根部（[EHakkaCareApp]）跑而不是各畫面單獨測：落點是 router 的
 /// redirect 決定的，而它同時看三件事（有沒有登入、有沒有身分、長者有沒有建資料）。
 /// 個別畫面的測試通過，不代表這三個條件銜接起來會把人帶到對的地方。
 void main() {
@@ -80,7 +80,7 @@ void main() {
   /// 掛上整個 App（起點同正式啟動：未登入落在登入頁）。
   Future<void> pumpApp(WidgetTester tester) async {
     useTallView(tester);
-    await tester.pumpWidget(AiElderCareApp());
+    await tester.pumpWidget(EHakkaCareApp());
     await settle(tester);
   }
 

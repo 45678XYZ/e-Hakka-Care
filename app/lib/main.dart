@@ -28,7 +28,7 @@ Future<void> main() async {
     // 提醒排不上，其餘照常
   }
 
-  runApp(AiElderCareApp());
+  runApp(EHakkaCareApp());
 
   // 提醒在啟動時重排，不擋畫面顯示。
   // 放在啟動而不是管理頁：長輩那台手機不會進管理頁，但一樣要收到提醒。
@@ -49,8 +49,8 @@ Future<void> syncReminders() => RoutineSync.refresh();
 ///
 /// 落點不在這裡決定，交給 app_router 的 redirect：條件有三層（有沒有登入、有沒有宣告
 /// 身分、長者有沒有建資料），只有集中判斷才不會有組合漏掉，web 上直接開網址也才擋得住。
-class AiElderCareApp extends StatelessWidget {
-  AiElderCareApp({super.key});
+class EHakkaCareApp extends StatelessWidget {
+  EHakkaCareApp({super.key});
 
   final _router = buildRouter();
 
