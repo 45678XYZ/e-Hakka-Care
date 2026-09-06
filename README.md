@@ -95,6 +95,18 @@ terraform apply
 
 ---
 
+## 介面預覽
+
+### 長者端
+
+<img src="docs/imgs/setup.png" alt="初次設定：建立長輩基本資料與說話語言" height="500"> &nbsp;&nbsp; <img src="docs/imgs/main.png" alt="主頁：今天的安排" height="500"> &nbsp;&nbsp; <img src="docs/imgs/chat.png" alt="語音陪伴" height="500">
+
+### 照護者端
+
+<img src="docs/imgs/caregiver-summaries.png" alt="每日摘要" height="500"> &nbsp;&nbsp; <img src="docs/imgs/caregiver-timeline.png" alt="生活時間軸" height="500"> &nbsp;&nbsp; <img src="docs/imgs/caregiver-stats.png" alt="統計" height="500">
+
+---
+
 ## 文件導覽
 
 ### 核心架構與規格
