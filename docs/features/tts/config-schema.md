@@ -42,7 +42,7 @@ model gate 不完整時同樣 fail closed。來源解析見 `backend/src/shared/
       "languages": ["hak"],
       "dialects": ["htia_sixian"],
       "metadata_ref": "omnivoice",
-      "endpoint_name": "ai-elder-care-tts-omnivoice"
+      "endpoint_name": "e-hakka-care-tts-omnivoice"
     }
   },
   "model_metadata": {

@@ -29,7 +29,7 @@ HAKKA_DIALECTS = (
 def _formo_endpoint_names() -> dict[str, str]:
     """回傳 Terraform 固定產生的六腔 endpoint 名稱。"""
     return {
-        dialect: f"ai-elder-care-asr-formo-{dialect.removeprefix('htia_')}"
+        dialect: f"e-hakka-care-asr-formo-{dialect.removeprefix('htia_')}"
         for dialect in HAKKA_DIALECTS
     }
 
@@ -92,7 +92,7 @@ def _terraform_asr_config_json(*, endpoints_enabled: bool = True) -> str:
             "status": "enabled",
             "kind": "remote_model",
             "metadata_ref": "taiwan_tongues_ce",
-            "endpoint_name": "ai-elder-care-asr-ce",
+            "endpoint_name": "e-hakka-care-asr-ce",
         }
         for dialect, endpoint_name in _formo_endpoint_names().items():
             provider_id = f"formo_remote_{dialect}"
@@ -184,7 +184,7 @@ class TestTerraformConfigContract:
         """CE 與六腔 endpoint 名稱正確帶入 provider config。"""
         config = parse_asr_config(json.loads(_terraform_asr_config_json()))
 
-        assert config.providers["ce_remote"].endpoint_name == "ai-elder-care-asr-ce"
+        assert config.providers["ce_remote"].endpoint_name == "e-hakka-care-asr-ce"
         for dialect, endpoint_name in _formo_endpoint_names().items():
             assert (
                 config.providers[f"formo_remote_{dialect}"].endpoint_name

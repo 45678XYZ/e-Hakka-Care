@@ -111,7 +111,7 @@ def _terraform_tts_config(
             "languages": ["hak"],
             "dialects": list(HAKKA_DIALECTS),
             "metadata_ref": "omnivoice",
-            "endpoint_name": "ai-elder-care-tts-omnivoice",
+            "endpoint_name": "e-hakka-care-tts-omnivoice",
         }
         model_metadata["omnivoice"] = _metadata(
             model_id="formospeech/omnivoice-hakka-community-1",
@@ -125,7 +125,7 @@ def _terraform_tts_config(
             "languages": ["hak"],
             "dialects": sorted(VOXHAKKA_DIALECTS),
             "metadata_ref": "voxhakka",
-            "endpoint_name": "ai-elder-care-tts-voxhakka",
+            "endpoint_name": "e-hakka-care-tts-voxhakka",
             "speaker": "XF",
         }
         model_metadata["voxhakka"] = _metadata(
@@ -140,7 +140,7 @@ def _terraform_tts_config(
             "languages": ["zh-TW"],
             "dialects": [],
             "metadata_ref": "breezyvoice",
-            "endpoint_name": "ai-elder-care-tts-breezyvoice",
+            "endpoint_name": "e-hakka-care-tts-breezyvoice",
         }
         model_metadata["breezyvoice"] = _metadata(
             model_id="MediaTek-Research/BreezyVoice",

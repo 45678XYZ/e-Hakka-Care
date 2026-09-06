@@ -79,14 +79,14 @@ def default_config() -> AsrConfig:
                 status=ProviderStatus.ENABLED,
                 metadata_ref="taiwan_tongues_ce",
                 kind=ProviderKind.REMOTE_MODEL,
-                endpoint_name="ai-elder-care-asr-ce",
+                endpoint_name="e-hakka-care-asr-ce",
             ),
             "formo_remote": ProviderConfig(
                 identifier="formo_remote",
                 status=ProviderStatus.ENABLED,
                 metadata_ref="formospeech_whisper_v3",
                 kind=ProviderKind.REMOTE_MODEL,
-                endpoint_name="ai-elder-care-asr-formo",
+                endpoint_name="e-hakka-care-asr-formo",
             ),
         },
         model_metadata={

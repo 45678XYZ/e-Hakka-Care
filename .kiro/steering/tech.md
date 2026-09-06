@@ -113,8 +113,8 @@ App Client 沒有 secret，這四個值本來就會被打包進 App，不是機�
 
 | 情境 | Skill |
 |---|---|
-| 任何開發任務開始前的定位 | `developing-ai-elder-care` |
-| 動到 ASR/TTS 或 chat 語音 bridge | `developing-ai-elder-care-speech` |
+| 任何開發任務開始前的定位 | `developing-e-hakka-care` |
+| 動到 ASR/TTS 或 chat 語音 bridge | `developing-e-hakka-care-speech` |
 | 寫 boto3／botocore 程式碼 | `aws-sdk-python-usage` |
 | DynamoDB schema／access pattern／GSI／成本設計或除錯 | `amazon-dynamodb` |
 | Lambda／API Gateway／EventBridge／SQS 事件源開發或除錯 | `aws-serverless` |

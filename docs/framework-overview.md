@@ -150,7 +150,7 @@
 ## 專案結構
 
 ```
-ai-elder-care/
+e-hakka-care/
 ├── app/            # Flutter 前端 App
 ├── backend/        # Python 後端（Lambda 函式與共用模組）
 ├── terraform/      # AWS 基礎設施定義

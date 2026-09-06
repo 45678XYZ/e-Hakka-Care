@@ -51,14 +51,14 @@ Parser：`backend/src/shared/asr/config.py`；來源解析：
       "status": "enabled",
       "kind": "remote_model",
       "metadata_ref": "taiwan_tongues_ce",
-      "endpoint_name": "ai-elder-care-asr-ce"
+      "endpoint_name": "e-hakka-care-asr-ce"
     },
     "formo_remote_htia_sixian": {
       "identifier": "formo_remote_htia_sixian",
       "status": "enabled",
       "kind": "remote_model",
       "metadata_ref": "formospeech_whisper_v3",
-      "endpoint_name": "ai-elder-care-asr-formo-sixian"
+      "endpoint_name": "e-hakka-care-asr-formo-sixian"
     }
   },
   "model_metadata": {
