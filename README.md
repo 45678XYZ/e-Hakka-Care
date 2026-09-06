@@ -1,6 +1,6 @@
 # 客照e點通 App
 
-專為高齡長者與家屬設計的**智慧長照解決方案**——結合生成式 AI，打造具備情感陪伴、行程提醒與異常偵測的語音助理，並為家屬提供即時的照護儀表板。
+專為高齡長者與家屬設計的**智慧長照解決方案**。結合生成式 AI，打造具備情感陪伴、行程提醒與異常偵測的語音助理，並為家屬提供即時的照護儀表板。長者端支援**華語與客語**，且客語語音包含四縣、海陸、大埔、饒平、詔安、南四縣六腔。
 
 ## 系統核心模組
 
@@ -8,35 +8,21 @@
 
 | 模組 | 名稱 | 說明 |
 |------|------|------|
-| A | 語音互動陪伴 | 全語音介面、AgentCore Runtime 對話大腦（長期記憶 + 溫暖語氣）、行程追蹤、衛教知識庫問答 |
-| B | 生活記錄與智慧摘要 | 從自然對話自動萃取結構化生活事件、每日產出身心靈摘要 |
-| C | 照護者資訊介面 | 緊急警報、行程管理（用藥/回診/運動）、AI 健康摘要、事件時間軸與統計 |
+| A | 語音互動陪伴 | 語音對話（支援華語與客語）、聊天介面、口頭回報與增修行程、衛教知識問答、天氣查詢、記憶系統、緊急狀況通知 |
+| B | 生活記錄與智慧摘要 | 從日常對話自動整理生活紀錄、分為飲食／活動／睡眠／用藥／身心／安全／其他七類、每晚彙整當日摘要、記錄例行公事 |
+| C | 照護者資訊介面 | 綁定與管理長者帳號、閱讀每日健康摘要、瀏覽生活事件時間軸、查看互動頻率與例行公事完成率、新增與調整行程、接收緊急通知 |
 
 ## 技術架構
 
-```
-Flutter App（長者語音 + 照護者管理）
-        │
-        ▼
-API Gateway + Cognito JWT 認證
-        │
-        ├── POST /chat ──→ AgentCore Runtime（LangGraph 狀態機 + 13 個工具）
-        │                       ├── Tools Lambda（行程/事件/安全通知）
-        │                       └── Bedrock Knowledge Base（衛教知識檢索）
-        │
-        ├── REST APIs ──→ Lambda Handlers（elders / routines / events / summaries / stats）
-        │
-        ├── Session Close ──→ SQS ──→ Batch Extractor（Extraction Pipeline）
-        │
-        └── EventBridge ──→ Summary Generator（每日摘要）/ Daily Digest（晚報推播）
-```
+![AWS 架構圖](docs/imgs/aws_architecture.png)
 
 **技術選型**：
 - **前端**：Flutter（單一 App 雙模式）
-- **後端**：Python Lambda + LangGraph + Bedrock Claude
-- **基礎設施**：Terraform IaC（API Gateway / DynamoDB / Cognito / S3 / SQS / EventBridge / SNS）
+- **後端**：Python 3.13 Lambda + Bedrock Claude
+- **基礎設施**：Terraform IaC（API Gateway / Lambda / DynamoDB / Cognito / S3 / SQS / EventBridge / SNS / SSM / CloudWatch，以及 SageMaker ASR／TTS 推論端點、Bedrock AgentCore 與 Knowledge Base）
 - **對話 AI**：AWS Bedrock AgentCore Runtime + LangChain 工具鏈
-- **語音**：裝置端 ASR + 後端 TTS（Polly 中文 / OmniVoice 客語）
+- **語音辨識**：華語走裝置端辨識，客語錄音上傳後端 ASR（Formo 六腔 SageMaker，CE 為共同備援；後端另有 Amazon Transcribe 華語路徑）
+- **語音合成**：全在後端，華語 BreezyVoice／Polly Zhiyu，客語 OmniVoice／VoxHakka；各端點有獨立的 enable 與 production 核准開關
 
 ## 目錄結構
 
@@ -53,8 +39,9 @@ API Gateway + Cognito JWT 認證
 └── .kiro/          # steering、specs、AI 工具 skill
 ```
 
-各目錄皆有獨立 README：
+以下目錄有獨立 README：
 [app/](app/README.md) ·
+[backend/](backend/README.md) ·
 [backend/src/](backend/src/README.md) ·
 [data/](data/README.md) ·
 [docs/](docs/README.md) ·
@@ -67,7 +54,7 @@ API Gateway + Cognito JWT 認證
 
 ### 1. 前端 App（Flutter）
 
-> 平台檔案（`android/`、`web/`）已在版控內，**不要跑 `flutter create`**——會覆蓋麥克風權限、通知 receiver 等設定。
+> 平台檔案（`android/`、`web/`）已在版控內，**不要跑 `flutter create`**，它會覆蓋麥克風權限、通知 receiver 等設定。
 
 ```bash
 cd app
@@ -94,14 +81,25 @@ pip install -r agentcore_requirements.txt
 
 ```bash
 cd terraform
+cp terraform.tfvars.example terraform.tfvars   # 填入 API 金鑰等變數
 terraform init
 terraform plan
 terraform apply
 ```
 
-### 4. 環境變數
+> `terraform.tfvars` 不進版控。裡面每個變數都有空字串預設值，漏填不會讓 apply 失敗，而是把線上既有的值安靜覆蓋成空的，apply 前請確認 plan 沒有這種改動。
 
-在專案根目錄建立 `.env` 並填入 AWS 憑證與服務設定（所需欄位參考 `terraform/variables.tf`）。
+---
+
+## 介面預覽
+
+### 長者端
+
+<img src="docs/imgs/setup.png" alt="初次設定：建立長輩基本資料與說話語言" height="500"> &nbsp;&nbsp; <img src="docs/imgs/main.png" alt="主頁：今天的安排" height="500"> &nbsp;&nbsp; <img src="docs/imgs/chat.png" alt="語音陪伴" height="500">
+
+### 照護者端
+
+<img src="docs/imgs/caregiver-summaries.png" alt="每日摘要" height="500"> &nbsp;&nbsp; <img src="docs/imgs/caregiver-timeline.png" alt="生活時間軸" height="500"> &nbsp;&nbsp; <img src="docs/imgs/caregiver-stats.png" alt="統計" height="500">
 
 ---
 
@@ -113,7 +111,7 @@ terraform apply
 |------|------|
 | [docs/framework.md](docs/framework.md) | 系統框架：架構圖、模組設計、DynamoDB 表結構、Session 狀態機 |
 | [docs/api.md](docs/api.md) | API 規格書：所有 REST 端點（App 與後端唯一契約） |
-| [docs/llm_tools.md](docs/llm_tools.md) | 對話大腦 13 個工具的觸發條件與 I/O |
+| [docs/llm_tools.md](docs/llm_tools.md) | 對話大腦各工具的觸發條件與 I/O |
 
 ### 語音子系統
 
@@ -134,15 +132,13 @@ terraform apply
 | [docs/features/asr-agentcore-frontend-integration-plan.md](docs/features/asr-agentcore-frontend-integration-plan.md) | ASR／Agent／Frontend 整併計畫 |
 | [docs/features/request_elder-lang-dialect-via-tool.md](docs/features/request_elder-lang-dialect-via-tool.md) | App → 後端需求：長者語言與腔調設定 |
 
-### 交付文件
+### 使用者旅程
 
 | 文件 | 說明 |
 |------|------|
-| [docs/user-journey.md](docs/user-journey.md) | 使用者旅程 |
-| [docs/deliverables/user-journey.md](docs/deliverables/user-journey.md) | 交付版使用者旅程 |
-| [docs/deliverables/frontend-chat-realtime-dataflow.md](docs/deliverables/frontend-chat-realtime-dataflow.md) | 前端 realtime 對話資料流 |
-| [docs/deliverables/frontend-session-dataflow.md](docs/deliverables/frontend-session-dataflow.md) | 前端 session 生命週期資料流 |
-| [docs/deliverables/frontend-caregiver-dataflow.md](docs/deliverables/frontend-caregiver-dataflow.md) | 前端照護者頁面資料流 |
+| [docs/user-journey.md](docs/user-journey.md) | 長者與照護者從註冊到日常使用的端到端情境 |
+
+交付版文件（交付版使用者旅程、前端各資料流）放在 `docs/deliverables/`，依 [.gitignore](.gitignore) 不進版控，只存在於本機。
 
 ### 開發指南
 
@@ -160,19 +156,20 @@ terraform apply
 |------|-----------------|
 | `cognito.tf` | Cognito User Pool（認證與 JWT） |
 | `api_gateway.tf` | API Gateway REST API（路由與 JWT 驗證） |
-| `lambda.tf` | Lambda Functions（14 支） |
+| `lambda.tf` | Lambda Functions（15 支） |
 | `lambda_config_parameters.tf` | SSM Parameters（ASR／TTS 設定） |
 | `dynamodb.tf` | DynamoDB Tables（7 張） |
 | `sqs.tf` | SQS Queue + DLQ（batch 萃取佇列） |
 | `eventbridge.tf` | EventBridge Scheduler（session close / 摘要 / digest） |
 | `s3.tf` | S3 Buckets（TTS 音訊、KB 文件、Lambda 部署包） |
 | `bedrock_kb.tf` | Bedrock Knowledge Base（衛教知識庫） |
-| `bedrock_iam.tf` | Bedrock 呼叫與 KB 檢索 IAM |
+| `bedrock_iam.tf` | Bedrock 模型呼叫 IAM（萃取 pipeline 用） |
 | `agentcore.tf` | AgentCore Runtime 部署配置 |
 | `asr_models.tf` | ASR SageMaker Endpoints |
 | `asr_lambda_config.tf` | ASR 設定來源 |
-| `tts_models.tf` | TTS SageMaker Endpoint |
+| `tts_models.tf` | TTS SageMaker Endpoints |
 | `tts_lambda_config.tf` | TTS 設定來源 |
+| `tts_worker.tf` | 非同步 TTS 合成佇列、DLQ 與 worker Lambda |
 | `cloudwatch.tf` | CloudWatch Alarms + SNS |
 | `providers.tf` / `variables.tf` / `outputs.tf` / `versions.tf` | Provider、變數、輸出、版本鎖定 |
 
