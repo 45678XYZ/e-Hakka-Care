@@ -14,22 +14,7 @@
 
 ## 技術架構
 
-```
-Flutter App（長者語音 + 照護者管理）
-        │
-        ▼
-API Gateway + Cognito JWT 認證
-        │
-        ├── POST /chat ──→ AgentCore Runtime（LangGraph 狀態機 + 17 個工具）
-        │                       ├── Tools Lambda（行程/事件/安全通知）
-        │                       └── Bedrock Knowledge Base（衛教知識檢索）
-        │
-        ├── REST APIs ──→ Lambda Handlers（elders / routines / events / summaries / stats）
-        │
-        ├── Session Close ──→ SQS ──→ Batch Extractor（Extraction Pipeline）
-        │
-        └── EventBridge ──→ Summary Generator（每日摘要）/ Daily Digest（晚報推播）
-```
+![AWS 架構圖](docs/imgs/aws_architecture.png)
 
 **技術選型**：
 - **前端**：Flutter（單一 App 雙模式）
