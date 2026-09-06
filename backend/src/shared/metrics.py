@@ -24,7 +24,7 @@ import time
 
 logger = logging.getLogger(__name__)
 
-NAMESPACE = os.environ.get("METRICS_NAMESPACE", "AiElderCare/Extraction")
+NAMESPACE = os.environ.get("METRICS_NAMESPACE", "EHakkaCare/Extraction")
 
 # 指標名稱集中管理，避免各處拼字不一致而變成兩個指標
 EVENT_COUNT = "EventCount"

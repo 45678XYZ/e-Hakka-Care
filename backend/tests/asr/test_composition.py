@@ -162,7 +162,7 @@ def test_approved_ce_model_builds_remote_provider() -> None:
     registry = build_provider_registry(config)
 
     assert isinstance(registry["ce_remote"], SageMakerAsrProvider)
-    assert registry["ce_remote"].endpoint_name == "ai-elder-care-asr-ce"
+    assert registry["ce_remote"].endpoint_name == "e-hakka-care-asr-ce"
 
 
 def test_approved_formo_model_is_instantiated() -> None:
@@ -174,7 +174,7 @@ def test_approved_formo_model_is_instantiated() -> None:
 
     registry = build_provider_registry(config)
     assert isinstance(registry["formo_remote"], SageMakerAsrProvider)
-    assert registry["formo_remote"].endpoint_name == "ai-elder-care-asr-formo"
+    assert registry["formo_remote"].endpoint_name == "e-hakka-care-asr-formo"
 
 
 def test_enabled_known_aws_managed_provider_is_instantiated() -> None:

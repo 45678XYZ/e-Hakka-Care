@@ -1,5 +1,5 @@
 ---
-name: developing-ai-elder-care-speech
+name: developing-e-hakka-care-speech
 description: "ASR/TTS 與 Chat 語音串接的薄型維護指引。修改 backend/src/shared/asr/、backend/src/shared/tts/、Chat 語音 bridge、terraform/asr_*、terraform/tts_* 或 docs/asr/、docs/tts/ 時使用；依路徑按需載入規格並保留 remote-only、fail-closed、語言／腔調與 PII 邊界。"
 ---
 
