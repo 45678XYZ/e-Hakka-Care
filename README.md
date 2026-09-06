@@ -39,7 +39,7 @@
 └── .kiro/          # steering、specs、AI 工具 skill
 ```
 
-各目錄皆有獨立 README：
+以下目錄有獨立 README：
 [app/](app/README.md) ·
 [backend/](backend/README.md) ·
 [backend/src/](backend/src/README.md) ·
@@ -54,7 +54,7 @@
 
 ### 1. 前端 App（Flutter）
 
-> 平台檔案（`android/`、`web/`）已在版控內，**不要跑 `flutter create`**——會覆蓋麥克風權限、通知 receiver 等設定。
+> 平台檔案（`android/`、`web/`）已在版控內，**不要跑 `flutter create`**，它會覆蓋麥克風權限、通知 receiver 等設定。
 
 ```bash
 cd app
@@ -88,10 +88,6 @@ terraform apply
 ```
 
 > `terraform.tfvars` 不進版控。裡面每個變數都有空字串預設值，漏填不會讓 apply 失敗，而是把線上既有的值安靜覆蓋成空的，apply 前請確認 plan 沒有這種改動。
-
-### 4. 環境變數
-
-在專案根目錄建立 `.env` 並填入 AWS 憑證與服務設定（所需欄位參考 `terraform/variables.tf`）。
 
 ---
 
@@ -167,11 +163,11 @@ terraform apply
 | `eventbridge.tf` | EventBridge Scheduler（session close / 摘要 / digest） |
 | `s3.tf` | S3 Buckets（TTS 音訊、KB 文件、Lambda 部署包） |
 | `bedrock_kb.tf` | Bedrock Knowledge Base（衛教知識庫） |
-| `bedrock_iam.tf` | Bedrock 呼叫與 KB 檢索 IAM |
+| `bedrock_iam.tf` | Bedrock 模型呼叫 IAM（萃取 pipeline 用） |
 | `agentcore.tf` | AgentCore Runtime 部署配置 |
 | `asr_models.tf` | ASR SageMaker Endpoints |
 | `asr_lambda_config.tf` | ASR 設定來源 |
-| `tts_models.tf` | TTS SageMaker Endpoint |
+| `tts_models.tf` | TTS SageMaker Endpoints |
 | `tts_lambda_config.tf` | TTS 設定來源 |
 | `tts_worker.tf` | 非同步 TTS 合成佇列、DLQ 與 worker Lambda |
 | `cloudwatch.tf` | CloudWatch Alarms + SNS |
