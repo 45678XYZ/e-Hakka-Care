@@ -18,8 +18,8 @@
 
 **技術選型**：
 - **前端**：Flutter（單一 App 雙模式）
-- **後端**：Python Lambda + LangGraph + Bedrock Claude
-- **基礎設施**：Terraform IaC（API Gateway / DynamoDB / Cognito / S3 / SQS / EventBridge / SNS）
+- **後端**：Python 3.13 Lambda + Bedrock Claude
+- **基礎設施**：Terraform IaC（API Gateway / Lambda / DynamoDB / Cognito / S3 / SQS / EventBridge / SNS / SSM / CloudWatch，以及 SageMaker ASR／TTS 推論端點、Bedrock AgentCore 與 Knowledge Base）
 - **對話 AI**：AWS Bedrock AgentCore Runtime + LangChain 工具鏈
 - **語音辨識**：華語走裝置端辨識，客語錄音上傳後端 ASR（Formo 六腔 SageMaker，CE 為共同備援；後端另有 Amazon Transcribe 華語路徑）
 - **語音合成**：全在後端，華語 BreezyVoice／Polly Zhiyu，客語 OmniVoice／VoxHakka；各端點有獨立的 enable 與 production 核准開關
